@@ -1,6 +1,6 @@
 import { getUser } from "@/queries/user";
-import { Login } from "../login";
 import { redirect } from "next/navigation";
+import { Login } from "../login";
 
 export default async function SignUpPage() {
   const user = await getUser();
@@ -8,5 +8,5 @@ export default async function SignUpPage() {
     return redirect("/app");
   }
 
-  return <Login mode="signup" />;
+  return <Login mode='signup' />;
 }

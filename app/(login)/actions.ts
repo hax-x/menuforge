@@ -4,6 +4,7 @@ import { validatedAction } from "@/lib/auth/middleware";
 import { redirect } from "next/navigation";
 import { createClient } from "@/supabase/server";
 import config from "@/config";
+import SignInPage from "./sign-in/page";
 
 const signInSchema = z.object({
   email: z.string().email().min(3).max(255),
@@ -23,7 +24,6 @@ export const signIn = validatedAction(signInSchema, async (data) => {
     return { error: "Invalid credentials. Please try again." };
   }
 
-  
   const { data: userData, error: userDataError } = await supabase
     .from("user_data")
     .select("*")
@@ -41,12 +41,16 @@ export const signIn = validatedAction(signInSchema, async (data) => {
     }
   }
   // If sign-in is successful, redirect to dashboard
-  redirect("/");
+  redirect(`{/dashboard/${signInData.user.id}`);
 });
 
 const signUpSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
+  confirmPassword: z.string().min(8).optional(),
+  firstName: z.string().min(1).optional(),
+  lastName: z.string().min(1).optional(),
+  phoneNumber: z.string().optional(),
   inviteId: z.string().optional(),
 });
 
@@ -150,6 +154,11 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
   //   const priceId = formData.get('priceId') as string;
   //   return createCheckoutSession({ team: createdTeam, priceId });
   // }
+  // Check if passwords match
+  if (data.confirmPassword && data.password !== data.confirmPassword) {
+    return { error: "Passwords do not match" };
+  }
+
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
@@ -157,46 +166,52 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
   if (signUpError) {
     return { error: signUpError.message };
   }
-  // Check if user_data entry exists and create i
-  const { error: insertError } = await supabase
-    .from("user_data")
-    .insert({ user_id: signUpData?.user?.id });
+
+  // Check if user_data entry exists and create it with additional fields
+  const { error: insertError } = await supabase.from("user_data").insert({
+    user_id: signUpData?.user?.id,
+    first_name: data.firstName,
+    last_name: data.lastName,
+    phone_number: data.phoneNumber,
+  });
 
   if (insertError) {
     console.error("Error creating user_data entry:", insertError);
     // Consider how you want to handle this error
   }
-  redirect("/app");
+  redirect(`/dashboard/${signUpData.user?.id}`);
 });
-export const signInWithMagicLink = validatedAction(
-  z.object({
-    email: z.string().email(),
-    redirect: z.string().optional(),
-    priceId: z.string().optional(),
-  }),
-  async (data) => {
-    const supabase = await createClient();
-    const { email, priceId } = data;
-    const redirectTo = `${config.domainName}/api/auth/callback`;
 
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${redirectTo}?priceId=${encodeURIComponent(
-          priceId || ""
-        )}&redirect=${encodeURIComponent("/test")}`,
-      },
-    });
-    if (error) {
-      console.error("Error sending magic link:", error);
-      return { error: error.message };
-    }
+// export const signInWithMagicLink = validatedAction(
+//   z.object({
+//     email: z.string().email(),
+//     redirect: z.string().optional(),
+//     priceId: z.string().optional(),
+//   }),
+//   async (data) => {
+//     const supabase = await createClient();
+//     const { email, priceId } = data;
+//     const redirectTo = `${config.domainName}/api/auth/callback`;
 
-    return { success: "Magic link sent to your email." };
-  }
-);
+//     const { error } = await supabase.auth.signInWithOtp({
+//       email,
+//       options: {
+//         emailRedirectTo: `${redirectTo}?priceId=${encodeURIComponent(
+//           priceId || "",
+//         )}&redirect=${encodeURIComponent("/test")}`,
+//       },
+//     });
+//     if (error) {
+//       console.error("Error sending magic link:", error);
+//       return { error: error.message };
+//     }
+
+//     return { success: "Magic link sent to your email." };
+//   },
+// );
+
 export const signInWithGoogle = async (
-  event: React.FormEvent<HTMLFormElement>
+  event: React.FormEvent<HTMLFormElement>,
 ) => {
   event.preventDefault();
   const formData = new FormData(event.currentTarget);
@@ -208,7 +223,7 @@ export const signInWithGoogle = async (
       provider: "google",
       options: {
         redirectTo: `${redirectTo}?priceId=${encodeURIComponent(
-          priceId || ""
+          priceId || "",
         )}&redirect=/test`,
       },
     });
@@ -223,5 +238,5 @@ export const signInWithGoogle = async (
 export const signOut = async () => {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect("/sign-in");
+  redirect("/");
 };

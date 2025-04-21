@@ -19,3 +19,13 @@ I am using Next.js for routing.
 **3. Redirection Logic**
 - Handles redirection after successful authentication.
 - Either use the getUser function in each page (redirect if null), or use middleware to set global protected routes (for example, protect everything starting with /dashboard which will include /dashboard/userId and /dashboard/slug). 
+
+
+## done
+
+- routing for dashboard, restboard and consumer sites done
+
+## next to be done
+
+- fix the signup signin pages.
+- design dashboard, restboard, consumer site templates

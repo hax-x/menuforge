@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { Login } from "../login";
 import { getUser } from "@/queries/user";
+
 export default async function SignInPage() {
   const user = await getUser();
 
@@ -11,5 +12,5 @@ export default async function SignInPage() {
   }
 
   // else render the sign-in page.
-  return <Login mode="signin" />;
+  return <Login  mode="signin"/>;
 }
