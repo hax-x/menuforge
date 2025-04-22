@@ -41,7 +41,7 @@ export const signIn = validatedAction(signInSchema, async (data) => {
     }
   }
   // If sign-in is successful, redirect to dashboard
-  redirect(`{/dashboard/${signInData.user.id}`);
+  redirect(`/dashboard/${signInData.user.id}`);
 });
 
 const signUpSchema = z.object({

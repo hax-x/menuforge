@@ -11,7 +11,7 @@ export function Header () {
         <div className="flex gap-5 text-lg leading-8 text-center">
           <Link href="#contact">
             <div className="text-zinc-800">
-              <div className="px-16 py-2 bg-violet-300 rounded-2xl max-md:px-5 cursor-pointer hover:bg-violet-400 transition-colors">
+              <div className="px-16 py-2 text-xl font-semibold bg-gradient-to-r from-violet-500 to-violet-600 rounded-lg px-8 py-4 text-white flex items-center justify-center cursor-pointer hover:from-violet-600 hover:to-violet-700 transition-colors shadow-lg shadow-violet-500/20 w-auto inline-block">
                 Contact
               </div>
             </div>
@@ -20,4 +20,3 @@ export function Header () {
       </div>
     )
 }
-      

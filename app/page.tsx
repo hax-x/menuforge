@@ -1,5 +1,3 @@
-// landing page
-
 "use client";
 import { Header } from "@/components/header";
 import Link from "next/link";
@@ -7,37 +5,16 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="overflow-hidden bg-zinc-800">
-      {/* Navigation Bar
-      <div className="flex overflow-hidden flex-wrap gap-5 justify-between px-20 py-7 w-full bg-zinc-800 max-md:px-5 max-md:max-w-full">
-        <Link href="/">
-          <div className="my-auto text-2xl font-semibold leading-none text-white cursor-pointer">
-            MenuForge
-          </div>
-        </Link>
-        <div className="flex gap-5 text-lg leading-8 text-center">
-          <Link href="/sign-up">
-            <div className="text-zinc-800">
-              <div className="px-16 py-2 bg-violet-300 rounded-2xl max-md:px-5 cursor-pointer hover:bg-violet-400 transition-colors">
-                Sign Up
-              </div>
-            </div>
-          </Link>
-          <Link href="/sign-in">
-            <div className="text-neutral-200">
-              <div className="px-16 py-2 rounded-2xl border border-violet-300 border-solid bg-violet-300 bg-opacity-0 max-md:px-5 cursor-pointer hover:bg-violet-300/10 transition-colors">
-                Log in
-              </div>
-            </div>
-          </Link>
-        </div>
-      </div> */}
+    <div className="overflow-hidden bg-zinc-900 text-gray-100 min-h-screen flex flex-col">
+      
       <Header />
-      <div className="flex flex-col items-center px-0 py-16 text-center bg-neutral-800">
-        <h1 className="text-6xl font-semibold leading-[90px] max-sm:text-4xl max-sm:leading-[60px]">
+      
+      {/* Hero Section */}
+      <section className="flex flex-col items-center px-6 py-24 text-center bg-gradient-to-b from-zinc-800 to-zinc-900">
+        <h1 className="text-6xl font-bold leading-tight max-sm:text-4xl max-sm:leading-tight bg-clip-text text-transparent bg-gradient-to-r from-violet-300 to-orange-300">
           Launch with Ease
         </h1>
-        <p className="mt-5 text-lg leading-8 opacity-40 w-[926px] max-md:w-4/5 max-sm:text-base max-sm:w-[90%]">
+        <p className="mt-8 text-xl leading-relaxed text-gray-300 max-w-4xl mx-auto max-md:w-4/5 max-sm:text-base max-sm:w-full">
           MenuForge is a powerful yet simple website builder designed
           specifically for new restaurants. Whether you're launching your first
           food venture or opening a new branch, MenuForge helps you get online
@@ -46,86 +23,110 @@ export default function Home() {
           required—just plug in your details and go live in minutes.
         </p>
         <Link href="/sign-in">
-          <div className="mt-10 w-64 text-2xl font-semibold bg-orange-300 rounded-2xl h-[57px] text-zinc-800 flex items-center justify-center cursor-pointer hover:bg-orange-400 transition-colors">
+          <div className="mt-12 w-64 text-xl font-semibold bg-gradient-to-r from-orange-400 to-orange-500 rounded-lg px-6 py-4 text-zinc-900 flex items-center justify-center cursor-pointer hover:from-orange-500 hover:to-orange-600 transition-colors shadow-lg shadow-orange-400/20">
             Get Started
           </div>
         </Link>
-      </div>
-      <div className="flex gap-12 justify-center items-start px-0 py-12 bg-zinc-800 max-md:flex-col max-md:items-center max-sm:px-0 max-sm:py-5">
-        <div className="text-center w-[311px] max-md:mb-8 max-sm:w-[90%]">
-          <div className="flex justify-center">
-            <Image
-              src="/window.svg"
-              width={70}
-              height={70}
-              alt="Cards icon"
-              className="mb-5"
-            />
+      </section>
+      
+      {/* Features Section */}
+      <section className="flex gap-12 justify-center items-start px-8 py-24 bg-zinc-900 max-md:flex-col max-md:items-center max-sm:px-6 max-sm:py-16">
+        <div className="text-center w-[320px] max-md:mb-12 max-sm:w-full">
+          <div className="flex justify-center mb-6">
+            <div className="rounded-full bg-violet-500/10 p-5 border border-violet-400/20">
+              <Image
+                src="/window.svg"
+                width={60}
+                height={60}
+                alt="Customizable websites icon"
+                className="opacity-90"
+              />
+            </div>
           </div>
-          <h2 className="text-lg font-semibold leading-8">
+          <h2 className="text-xl font-bold mb-3 text-violet-300">
             Customizable Websites
           </h2>
-          <p className="mt-2.5 text-lg leading-8 opacity-40">
+          <p className="text-lg leading-relaxed text-gray-400">
             Customize your own website for your business according to your
-            needs.
+            needs with our intuitive drag-and-drop builder.
           </p>
         </div>
-        <div className="text-center w-[311px] max-md:mb-8 max-sm:w-[90%]">
-          <div className="flex justify-center">
-            <Image
-              src="/globe.svg"
-              width={70}
-              height={70}
-              alt="Coin icon"
-              className="mb-5"
-            />
-          </div>
-          <h2 className="text-lg font-semibold leading-8">No payment fee</h2>
-          <p className="mt-2.5 text-lg leading-8 opacity-40">
-            Website creation is free of cost allowing you to deploy in minutes.
-          </p>
-        </div>
-        <div className="text-center w-[311px] max-md:mb-8 max-sm:w-[90%]">
-          <div className="flex justify-center">
-            <Image
-              src="/file.svg"
-              width={70}
-              height={70}
-              alt="Purse icon"
-              className="mb-5"
-            />
-          </div>
-          <h2 className="text-lg font-semibold leading-8">Menu Management</h2>
-          <p className="mt-2.5 text-lg leading-8 opacity-40">
-            Create, update, and showcase your full menu effortlessly.
-          </p>
-        </div>
-      </div>
-
-      {/* contact part */}
-      <div id="contact" className="px-0 py-32 pl-44 text-left bg-neutral-800 max-md:pl-12 max-sm:pl-5">
-        <h2 className="text-6xl font-semibold leading-[90px] max-sm:text-4xl max-sm:leading-[60px]">
-          Questions? Let's talk
-        </h2>
-        <p className="mt-5 text-lg leading-8 opacity-40 max-sm:text-base">
-          Contact us through our 24/7 live chat. We're always happy to help!
-        </p>
-
-
-          <div className="mt-10 w-64 text-2xl font-semibold bg-orange-300 rounded-2xl h-[57px] text-zinc-800 flex items-center justify-center cursor-pointer hover:bg-orange-400 transition-colors">
-            Contact Us
-          </div>
         
-      </div>
-      <div className="flex justify-between items-center px-12 pt-0 pb-12 bg-zinc-800 max-md:flex-col max-md:gap-2.5 max-md:items-center max-sm:flex-col max-sm:gap-2.5 max-sm:items-center max-sm:p-5">
-        <div className="text-lg font-semibold leading-8">© AHA 2025</div>
-        <div className="text-lg font-semibold leading-8 cursor-pointer hover:text-violet-300">
-          Privacy policy
+        <div className="text-center w-[320px] max-md:mb-12 max-sm:w-full">
+          <div className="flex justify-center mb-6">
+            <div className="rounded-full bg-orange-500/10 p-5 border border-orange-400/20">
+              <Image
+                src="/globe.svg"
+                width={60}
+                height={60}
+                alt="Free service icon"
+                className="opacity-90"
+              />
+            </div>
+          </div>
+          <h2 className="text-xl font-bold mb-3 text-orange-300">
+            No Payment Fee
+          </h2>
+          <p className="text-lg leading-relaxed text-gray-400">
+            Website creation is free of cost allowing you to deploy in minutes
+            without any hidden charges.
+          </p>
         </div>
-        <div className="text-lg font-semibold leading-8 cursor-pointer hover:text-violet-300">
-          Cookies policy
+        
+        <div className="text-center w-[320px] max-md:mb-8 max-sm:w-full">
+          <div className="flex justify-center mb-6">
+            <div className="rounded-full bg-violet-500/10 p-5 border border-violet-400/20">
+              <Image
+                src="/file.svg"
+                width={60}
+                height={60}
+                alt="Menu management icon"
+                className="opacity-90"
+              />
+            </div>
+          </div>
+          <h2 className="text-xl font-bold mb-3 text-violet-300">
+            Menu Management
+          </h2>
+          <p className="text-lg leading-relaxed text-gray-400">
+            Create, update, and showcase your full menu effortlessly with our
+            specialized restaurant tools.
+          </p>
         </div>
-      </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="px-8 py-24 bg-gradient-to-b from-zinc-900 to-zinc-800 max-md:px-8 max-sm:px-6">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-5xl font-bold leading-tight max-sm:text-4xl max-sm:leading-tight">
+            Questions? <span className="text-orange-300">Let's talk</span>
+          </h2>
+          <p className="mt-6 text-xl leading-relaxed text-gray-300 max-w-2xl max-sm:text-base">
+            Contact us through our 24/7 live chat. Our support team is always ready to help you create the perfect restaurant website!
+          </p>
+          <button className="mt-12 text-xl font-semibold bg-gradient-to-r from-violet-500 to-violet-600 rounded-lg px-8 py-4 text-white flex items-center justify-center cursor-pointer hover:from-violet-600 hover:to-violet-700 transition-colors shadow-lg shadow-violet-500/20 w-auto inline-block">
+            Contact Us
+          </button>
+        </div>
+      </section>
+      
+      {/* Footer */}
+      <footer className="mt-auto px-8 py-8 bg-zinc-800 border-t border-zinc-700">
+        <div className="flex justify-between items-center max-md:flex-col max-md:gap-4 max-sm:gap-6">
+          <div className="text-lg font-medium text-gray-300">© MenuForge 2025</div>
+          <div className="flex gap-8 max-sm:flex-col max-sm:gap-4 max-sm:items-center">
+            <Link href="/privacy" className="text-gray-300 hover:text-violet-300 transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/cookies" className="text-gray-300 hover:text-violet-300 transition-colors">
+              Cookies Policy
+            </Link>
+            <Link href="/terms" className="text-gray-300 hover:text-violet-300 transition-colors">
+              Terms of Service
+            </Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
