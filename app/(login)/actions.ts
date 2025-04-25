@@ -214,24 +214,21 @@ export const signInWithGoogle = async (
   event: React.FormEvent<HTMLFormElement>,
 ) => {
   event.preventDefault();
-  const formData = new FormData(event.currentTarget);
   const supabase = await createClient();
-  const priceId = formData.get("priceId") as string;
+
   try {
-    const redirectTo = `${config.domainName}/api/auth/callback`;
     const { error: signInError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${redirectTo}?priceId=${encodeURIComponent(
-          priceId || "",
-        )}&redirect=/test`,
+        redirectTo: `${window.location.origin}/api/callback`, // Must be full URL
       },
     });
+
     if (signInError) {
       return { error: "Failed to sign in with Google. Please try again." };
     }
   } catch (error) {
-    return { error: "Failed to sign in with Google. Please try again." };
+    return { error: "Unexpected error occurred during sign in." };
   }
 };
 

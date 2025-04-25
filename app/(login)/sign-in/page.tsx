@@ -8,7 +8,7 @@ export default async function SignInPage() {
   // Check if the user is already logged in
   // redirect to its admin dashboard.
   if (user) {
-    return redirect("/");
+    return redirect("/dashboard/" + user.id);
   }
 
   // else render the sign-in page.

@@ -1,3 +1,4 @@
+// this creates a supabase client for server side usage (auth, api, ssr, etc)
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 

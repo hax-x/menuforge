@@ -28,6 +28,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "next.config.ts"
-  ],
+, "app/dashboard/[userId]/addRestaurant"  ],
   "exclude": ["node_modules"]
 }

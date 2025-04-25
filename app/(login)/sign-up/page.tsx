@@ -5,7 +5,7 @@ import { Login } from "../login";
 export default async function SignUpPage() {
   const user = await getUser();
   if (user) {
-    return redirect("/app");
+    return redirect("/dashboard/" + user.id);
   }
 
   return <Login mode='signup' />;
