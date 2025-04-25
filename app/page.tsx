@@ -2,15 +2,13 @@
 import { Header } from "@/components/header";
 import Link from "next/link";
 import Image from "next/image";
-import { use, useEffect, useState } from "react";
-import { getUser } from "@/queries/user";
-import { set } from "zod";
 
-
-export default function Home() { 
+export default function Home() {
   return (
     <div className="overflow-hidden bg-zinc-900 text-gray-100 min-h-screen flex flex-col">
+      
       <Header />
+      
       {/* Hero Section */}
       <section className="flex flex-col items-center px-6 py-24 text-center bg-gradient-to-b from-zinc-800 to-zinc-900">
         <h1 className="text-6xl font-bold leading-tight max-sm:text-4xl max-sm:leading-tight bg-clip-text text-transparent bg-gradient-to-r from-violet-300 to-orange-300">
