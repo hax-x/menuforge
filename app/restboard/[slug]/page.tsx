@@ -1,16 +1,12 @@
-import Link from "next/link";
+"use client"
+import { useParams } from "next/navigation";
 
 export default function restBoard() {
-  // This is the restaurant DashboardIcon
-  // get the user id from params
-
-  // get all data required for the dashbaord from db based on id
-
-  let slug = "kfc";
+  let slug = useParams().slug;
 
   return (
     <div>
-      <h1>This is a restaurant dashboard</h1>
+      <h1>This is a restaurant dashboard for {slug}</h1>
     </div>
   );
 }
