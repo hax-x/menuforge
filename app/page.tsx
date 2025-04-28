@@ -103,7 +103,7 @@ export default function Home() {
           <p className="mt-6 text-xl leading-relaxed text-gray-300 max-w-2xl max-sm:text-base">
             Contact us through our 24/7 live chat. Our support team is always ready to help you create the perfect restaurant website!
           </p>
-          <button className="mt-12 text-xl font-semibold bg-gradient-to-r from-violet-500 to-violet-600 rounded-lg px-8 py-4 text-white flex items-center justify-center cursor-pointer hover:from-violet-600 hover:to-violet-700 transition-colors shadow-lg shadow-violet-500/20 w-auto inline-block">
+          <button className="mt-12 text-xl font-semibold bg-gradient-to-r from-violet-500 to-violet-600 rounded-lg px-8 py-4 text-white flex items-center justify-center cursor-pointer hover:from-violet-600 hover:to-violet-700 transition-colors shadow-lg shadow-violet-500/20 w-auto">
             Contact Us
           </button>
         </div>

@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/supabase/client";
 import { Plus } from "lucide-react";
 import Header from "@/components/header";
+import Loader from "@/components/loader";
 
 type Restaurant = {
   id: string;
@@ -22,21 +23,45 @@ export default function UserDashboard() {
   const supabase = createClient();
 
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchRestaurants = async () => {
-      if (!userId) return;
-      const { data, error } = await supabase
+    const protectRoute = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser();
+
+      if (error || !user) {
+        router.push("/sign-in"); // Not logged in
+        return;
+      }
+
+      if (user.id !== userId) {
+        router.push("/unauthorized"); // Logged in but wrong user
+        return;
+      }
+
+      // User is authorized, fetch restaurants
+      const { data, error: fetchError } = await supabase
         .from("Tenant")
         .select("*")
         .eq("user_id", userId);
 
-      if (error) console.error("Error fetching restaurants:", error.message);
-      else setRestaurants(data || []);
+      if (fetchError) {
+        console.error("Error fetching restaurants:", fetchError.message);
+      } else {
+        setRestaurants(data || []);
+      }
+
+      setLoading(false);
     };
 
-    fetchRestaurants();
-  }, [userId, supabase]);
+    protectRoute();
+  }, [userId, supabase, router]);
+
+  if (loading) {
+    return (
+      <Loader />
+    );
+  }
 
   return (
     <div className="bg-zinc-900 min-h-screen flex flex-col text-gray-100">
