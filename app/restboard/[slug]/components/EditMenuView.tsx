@@ -2,6 +2,10 @@
 import React from 'react';
 import { Plus, Trash2, Edit } from 'lucide-react';
 
+// add save option
+// get data from database
+// update data in database
+
 type Item = {
   id: number;
   name: string;
@@ -33,7 +37,7 @@ const EditMenuView: React.FC<EditMenuViewProps> = ({
   onOpenCategoryModal,
 }) => {
   return (
-    <div className="p-6">
+    <div className="h-full overflow-y-scroll p-6">
       <h2 className="text-2xl font-bold mb-6 text-gray-100">Edit Menu</h2>
 
       {/* Add Category Button */}

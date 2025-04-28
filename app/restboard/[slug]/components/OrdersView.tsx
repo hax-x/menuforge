@@ -2,6 +2,12 @@
 import React from 'react';
 import { Filter } from "lucide-react";
 
+// protected route
+// filter should be all, pendingConfirmation, confirmed, inProgress, dispatched, delivered, completed.
+// when completed, remove from here.
+// fix grid
+// get data from database
+
 type Order = {
   id: number;
   customer: string;
@@ -40,7 +46,7 @@ const OrdersView: React.FC<OrdersViewProps> = ({
           <span className="text-gray-300 mr-2">Filter by status:</span>
         </div>
         <div className="flex gap-2">
-          {["All", "Pending", "In Progress", "Completed"].map((status) => (
+          {["All", "Pending", "In Progress", "Completed", "Cancelled"].map((status) => (
             <button
               key={status}
               onClick={() => setStatusFilter(status)}
@@ -75,7 +81,7 @@ const OrdersView: React.FC<OrdersViewProps> = ({
               <tr key={order.id} className="border-t border-zinc-700">
                 <td className="px-4 py-3 text-sm text-gray-300">#{order.id}</td>
                 <td className="px-4 py-3 text-sm text-gray-300">{order.customer}</td>
-                <td className="px-4 py-3 text-sm text-gray-300">
+                <td className="px-4 py-3 text-sm text-gray-300 text-ellipsis overflow-hidden whitespace-nowrap">
                   {order.items.join(", ")}
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-300">{order.total}</td>
@@ -86,6 +92,8 @@ const OrdersView: React.FC<OrdersViewProps> = ({
                         ? "bg-green-900 text-green-300"
                         : order.status === "In Progress"
                         ? "bg-blue-900 text-blue-300"
+                        : order.status === "Cancelled" 
+                        ? "bg-red-900 text-red-300"
                         : "bg-yellow-900 text-yellow-300"
                     }`}
                   >

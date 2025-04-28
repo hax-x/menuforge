@@ -21,7 +21,7 @@ const Page = () => {
     {
       id: 1,
       customer: "John",
-      items: ["Burger"],
+      items: ["Burger", "fried", "soda", "aur", "kuch aur"],
       total: "$10",
       status: "Completed",
       time: "12:30 PM",
@@ -155,17 +155,17 @@ const Page = () => {
   };
 
   return (
-    <div className="bg-zinc-900 min-h-screen flex flex-col text-gray-100">
+    <div className="bg-zinc-900 h-screen flex flex-col text-gray-100">
       <Header />
 
-      <div className="flex flex-1">
+      <div className="flex flex-1 overflow-hidden">
         <Sidebar
           activeView={activeView}
           setActiveView={setActiveView}
           handleLogout={handleLogout}
         />
 
-        <main className="flex-1 overflow-auto bg-zinc-900">
+        <main className="flex-1 overflow-y-auto bg-zinc-900">
           {activeView === "orders" && (
             <OrdersView
               orders={orders}

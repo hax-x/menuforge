@@ -1,7 +1,9 @@
 'use client'
 
+import { Button } from '@/components/ui/button';
 import { useParams, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
+import Link from 'next/link'
 
 function AddRestaurant() {
   const router = useRouter();
@@ -173,6 +175,11 @@ function AddRestaurant() {
             >
               {loading ? "Submitting..." : "Create Restaurant"}
             </button>
+            <Button className="w-full mt-4" variant="outline" disabled={loading}>
+              <Link href={`/dashboard/${userId}`} className="text-gray-300 hover:text-violet-300 transition-colors">
+                Back to Dashboard
+              </Link>
+            </Button>
           </form>
         </div>
       </div>
