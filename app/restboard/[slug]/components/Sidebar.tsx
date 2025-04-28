@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { Menu, FileEdit, LineChart, Store, Settings, LogOut } from "lucide-react";
+import { Menu, FileEdit, LineChart, Store, Settings, LogOut,  } from "lucide-react";
 
 interface SidebarProps {
   activeView: string;
@@ -69,7 +69,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, handleLogo
           href="/dashboard"
           className="flex items-center gap-2 text-gray-300 hover:text-violet-300 transition-colors mb-4"
         >
-          <Store size={18} />
+          <
           <span>Go to Consumer Site</span>
         </Link>
       </div>

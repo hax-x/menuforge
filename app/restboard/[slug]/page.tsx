@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import Topbar from "./components/Topbar";
 import Sidebar from "./components/Sidebar";
 import OrdersView from "./components/OrdersView";
 import EditMenuView from "./components/EditMenuView";
