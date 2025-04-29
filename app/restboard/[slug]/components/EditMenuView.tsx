@@ -46,14 +46,14 @@ const EditMenuView = ({ tenantId }: { tenantId: string }) => {
     const categoryData = resCat.data;
 
     const categoriesWithItems: Category[] = await Promise.all(
-      categoryData.map(async (cat: any) => {
+      (categoryData ?? []).map(async (cat: any) => {
         const resItems = await getItems(tenantId, cat.id);
-        const items = resItems.code === 1 ? resItems.data : [];
-
+        const safeItems = resItems.code === 1 && Array.isArray(resItems.data) ? resItems.data : [];
+    
         return {
           id: cat.id,
           name: cat.name,
-          items: items.map((item: any) => ({
+          items: safeItems.map((item: any) => ({
             id: item.id,
             name: item.name,
             price: item.price,
@@ -63,6 +63,7 @@ const EditMenuView = ({ tenantId }: { tenantId: string }) => {
         };
       })
     );
+    
 
     setMenu(categoriesWithItems);
     setLoading(false);

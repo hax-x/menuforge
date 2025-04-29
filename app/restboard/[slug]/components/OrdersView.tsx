@@ -4,17 +4,15 @@ import { Filter } from "lucide-react";
 
 //Made changes to the grid and fixed the filters
 
-// type Order = {
-//   id: string;
-//   customerName: string;
-//   items: string;
-//   totalAmount: string;
-//   status: string;
-//   time: string;
-// };
-
 interface OrdersViewProps {
-  orders: Order[];
+  orders: [{
+    id: string;
+    customerName: string;
+    items: string;
+    totalAmount: string;
+    status: string;
+    created_at: Date;
+  }]
   statusFilter: string;
   setStatusFilter: (status: string) => void;
   updateOrderStatus: (orderId: string, newStatus: string) => void;
