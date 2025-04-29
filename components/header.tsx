@@ -6,6 +6,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { createClient } from "@/supabase/client";
 import { User, Settings, LogOut } from "lucide-react";
 import { motion } from "framer-motion";
+import Swal from "sweetalert2"
 
 export default function Header(props: any) {
   const { userId } = props;
@@ -43,9 +44,23 @@ export default function Header(props: any) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = async () => {
+  const logout = async () => {
     await supabase.auth.signOut();
     router.push("/");
+  };
+
+  const handleLogout = async () => {
+    Swal.fire({
+      title: "Do you want to logout?",
+      showDenyButton: false,
+      showCancelButton: true,
+      confirmButtonText: "Logout",
+      denyButtonText: `Don't save`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout();
+      } 
+    });
   };
 
   // Determine which page we are on

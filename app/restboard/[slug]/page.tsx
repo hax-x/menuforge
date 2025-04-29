@@ -1,151 +1,92 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Sidebar from "./components/Sidebar";
 import OrdersView from "./components/OrdersView";
 import EditMenuView from "./components/EditMenuView";
 import StatisticsView from "./components/StatisticsView";
-import CategoryModal from "./components/CategoryModal";
-import ItemModal from "./components/ItemModal";
 import Header from "@/components/header";
+import { createClient } from "@/supabase/client";
+import { useParams, useRouter } from "next/navigation";
+import Loader from "@/components/loader";
+import { getUser } from "@/queries/user";
+import { getTenant } from "@/queries/tenantInfo";
+import { getAllOrders } from "@/queries/orders";
+import { updateOrderStatus } from "@/queries/updateOrderStatus";
+import Swal from "sweetalert2";
+
+
 
 const Page = () => {
   const [activeView, setActiveView] = useState("orders");
-  const [profileOpen, setProfileOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [tenant, setTenant] = useState<any>(null);
+  const [orders, setOrders] = useState<any>([]);
+  const params = useParams();
+  const slug = params?.slug as string;
 
-  // Refs
-  const profileRef = useRef<HTMLDivElement>(null);
+  const supabase = createClient();
+  const router = useRouter();
 
-  // Orders
-  const [orders, setOrders] = useState<Order[]>([
-    {
-      id: 1,
-      customer: "John",
-      items: ["Burger", "fried", "soda", "aur", "kuch aur"],
-      total: "$10",
-      status: "Completed",
-      time: "12:30 PM",
-    },
-    {
-      id: 2,
-      customer: "Alice",
-      items: ["Pizza"],
-      total: "$15",
-      status: "Pending",
-      time: "1:00 PM",
-    },
-  ]);
+  useEffect(() => {
+    const handleRestaboardData = async () => {
+      const user = await getUser();
+
+      if (user === null) {
+        router.push("/sign-in"); // Not logged in
+        return;
+      }
+      
+      // if logged in, fetch this tenants data
+      const tenant = await getTenant(slug);
+
+      if (tenant.code === 0) {
+        console.log("failed to fetch tenant: ", tenant.message);
+        return;
+      } else {
+        setTenant(tenant.data);
+      }
+
+      if (user.id != tenant.data.user_id) {
+        router.push("/unauthorized"); // Logged in but wrong user
+        return;
+      }
+
+      // User is authorized, fetch orders for this user
+      const orders = await getAllOrders(tenant.data.id);
+      if (orders.code === 0) {
+        console.log("failed to fetch orders: ", orders.message);
+        return;
+      }
+
+      console.log("Orders: ", orders.data);     
+      setOrders(orders.data);
+      setLoading(false);
+    }
+
+    handleRestaboardData();
+  }
+  , [slug, router, supabase]);
+
   const [statusFilter, setStatusFilter] = useState("All");
 
-  const updateOrderStatus = (orderId: number, newStatus: string) => {
-    setOrders((prev) =>
-      prev.map((order) =>
-        order.id === orderId ? { ...order, status: newStatus } : order
-      )
-    );
-  };
-
-  const handleItemSubmit = (formData: ItemFormState) => {
-    const newItem = {
-      id: editingItem || Date.now(), // Use existing ID if editing, or generate new one
-      ...formData
-    };
-  
-    setCategories(prev => 
-      prev.map(cat => 
-        cat.id === currentCategoryId
-          ? {
-              ...cat,
-              items: editingItem
-                ? cat.items.map(item => item.id === editingItem ? newItem : item)
-                : [...cat.items, newItem]
-            }
-          : cat
-      )
-    );
-    setShowItemModal(false);
-  };
-
-  const handleCategorySubmit = (formData: CategoryFormState) => {
-    const newCategory = {
-      id: Date.now(), // Generate unique ID
-      name: formData.name,
-      items: [] // Initialize with empty array
-    };
-  
-    setCategories([...categories, newCategory]);
-    setCategoryForm({ name: "" }); // Reset form
-    setShowCategoryModal(false); // Close modal
-  };
-  
-  
-
-  // Categories & Items
-  const [categories, setCategories] = useState<Category[]>([
-    {
-      id: 1,
-      name: "Main",
-      items: [{ id: 1, name: "Burger", price: "$10", description: "Tasty" }],
-    },
-  ]);
-
-  // Modals & Forms
-  const [showCategoryModal, setShowCategoryModal] = useState(false);
-  const [showItemModal, setShowItemModal] = useState(false);
-  const [currentCategoryId, setCurrentCategoryId] = useState<number | null>(
-    null
-  );
-  const [editingItem, setEditingItem] = useState<number | null>(null);
-  const [itemForm, setItemForm] = useState<Item>({
-    name: "",
-    price: "",
-    description: "",
-    id: 0,
-  });
-  const [categoryForm, setCategoryForm] = useState({ name: "" });
-
-  // Handlers for menu editing
-  const onAddItem = (categoryId: number) => {
-    console.log('Add item clicked for category:', categoryId);
-    setCurrentCategoryId(categoryId);
-    setEditingItem(null);
-    setItemForm({ id: 0, name: "", price: "", description: "" });
-    setShowItemModal(true);
-    console.log('showItemModal set to:', true); // Check if this is being updated
-  };
-
-  const onEditItem = (categoryId: number, item: Item) => {
-    setCurrentCategoryId(categoryId);
-    setEditingItem(item.id);
-    setItemForm(item);
-    setShowItemModal(true);
-  };
-
-  const onDeleteItem = (categoryId: number, itemId: number) => {
-    setCategories((prev) =>
-      prev.map((cat) =>
-        cat.id === categoryId
-          ? { ...cat, items: cat.items.filter((i) => i.id !== itemId) }
-          : cat
-      )
-    );
-  };
-
-  const onDeleteCategory = (categoryId: number) => {
-    const target = categories.find((cat) => cat.id === categoryId);
-    if (target && target.items.length === 0) {
-      setCategories((prev) => prev.filter((cat) => cat.id !== categoryId));
-    } else {
-      alert("Cannot delete a category with items.");
-    }
-  };
-
   const handleLogout = () => {
-    // Redirect or clear session
-    console.log("Logging out...");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out",
+      cancelButtonText: "No, stay logged in",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        supabase.auth.signOut();
+        router.push("/sign-in");
+      }
+    });
   };
 
-  const statistics: StatisticsData = {
+  const statistics = {
     totalRevenue: "$1,000",
     totalOrders: orders.length,
     averageOrderValue: "$20.00",
@@ -153,6 +94,29 @@ const Page = () => {
     peakHours: "12:00 PM - 2:00 PM",
     customerRetention: "85%",
   };
+
+  const handleUpdateStatus = async (orderId: string, status: string) => {
+    const result = await updateOrderStatus(orderId, status);
+
+    if (result.code === 0) {
+      console.error("Error updating order status:", result.message);
+      return;
+    }
+
+    setOrders((prevOrders: any) =>
+      prevOrders.map((order: any) =>
+        order.id === orderId ? { ...order, status } : order
+      )
+    );
+    console.log("Order status updated successfully:", result.data);
+  };
+
+  // if loading is true, show loader
+  if (loading) {
+      return (
+        <Loader />
+      );
+    }
 
   return (
     <div className="bg-zinc-900 h-screen flex flex-col text-gray-100">
@@ -171,18 +135,13 @@ const Page = () => {
               orders={orders}
               statusFilter={statusFilter}
               setStatusFilter={setStatusFilter}
-              updateOrderStatus={updateOrderStatus}
+              updateOrderStatus={handleUpdateStatus}
             />
           )}
 
           {activeView === "editMenu" && (
             <EditMenuView
-              categories={categories}
-              onAddItem={onAddItem}
-              onEditItem={onEditItem}
-              onDeleteItem={onDeleteItem}
-              onDeleteCategory={onDeleteCategory}
-              onOpenCategoryModal={() => setShowCategoryModal(true)}
+              tenantId={tenant.id}
             />
           )}
 
@@ -191,27 +150,6 @@ const Page = () => {
           )}
         </main>
       </div>
-
-      {showCategoryModal && (
-        <CategoryModal
-        show={showCategoryModal}
-        onClose={() => setShowCategoryModal(false)}
-        onSubmit={handleCategorySubmit}
-        form={categoryForm}
-        setForm={setCategoryForm}
-      />
-      )}
-
-      {showItemModal && (
-        <ItemModal
-        show={showItemModal}
-        onClose={() => setShowItemModal(false)}
-        onSubmit={handleItemSubmit}
-        form={itemForm}
-        setForm={setItemForm}
-        isEditing={editingItem !== null}
-      />
-      )}
     </div>
   );
 };

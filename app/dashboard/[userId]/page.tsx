@@ -7,6 +7,8 @@ import { createClient } from "@/supabase/client";
 import { Plus } from "lucide-react";
 import Header from "@/components/header";
 import Loader from "@/components/loader";
+import { getTenants } from "@/queries/tenants";
+import { getUser } from "@/queries/user";
 
 type Restaurant = {
   id: string;
@@ -27,9 +29,9 @@ export default function UserDashboard() {
 
   useEffect(() => {
     const protectRoute = async () => {
-      const { data: { user }, error } = await supabase.auth.getUser();
+      const user = await getUser();
 
-      if (error || !user) {
+      if (user === null) {
         router.push("/sign-in"); // Not logged in
         return;
       }
@@ -39,16 +41,13 @@ export default function UserDashboard() {
         return;
       }
 
-      // User is authorized, fetch restaurants
-      const { data, error: fetchError } = await supabase
-        .from("Tenant")
-        .select("*")
-        .eq("user_id", userId);
+      // User is authorized, fetch restaurants for this user
+      const tenants = await getTenants(userId);
 
-      if (fetchError) {
-        console.error("Error fetching restaurants:", fetchError.message);
+      if (tenants.code === 0) {
+        console.error("Error fetching restaurants:", tenants.message);
       } else {
-        setRestaurants(data || []);
+        setRestaurants(tenants.data || []);
       }
 
       setLoading(false);

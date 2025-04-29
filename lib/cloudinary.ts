@@ -1,4 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
+import { u } from "framer-motion/client";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
@@ -6,6 +7,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET!,
 });
 
+// fuction to upload a file to Cloudinary
 export default async function uploadToCloudinary(file: Blob, folder = "uploads"): Promise<{ url: string | undefined }> {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
@@ -25,5 +27,17 @@ export default async function uploadToCloudinary(file: Blob, folder = "uploads")
     );
 
     uploadStream.end(buffer);
+  });
+}
+
+// funtion to delete a file from Cloudinary
+export async function deleteFromCloudinary(publicId: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.destroy(publicId, (error, result) => {
+      if (error) {
+        return reject(error);
+      }
+      resolve(result);
+    });
   });
 }
