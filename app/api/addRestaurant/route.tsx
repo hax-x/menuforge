@@ -13,9 +13,10 @@ export async function POST(request: NextRequest) {
     const logo = formData.get("logo") as Blob | null;
     const themeSettingsRaw = formData.get("themeSettings") as string | null;
     const userId = formData.get("userId") as string | null;
+    const templateId = formData.get("templateId") as string | null;
     const id = uuidv4();
 
-    if (!name || !slug || !logo || !themeSettingsRaw || !userId) {
+    if (!name || !slug || !logo || !themeSettingsRaw || !userId || !templateId) {
       return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
     }
 
@@ -42,6 +43,7 @@ export async function POST(request: NextRequest) {
           logo_url: url,
           themeSettings: themeSettings,
           user_id: userId,
+          templateId,
         },
       ])
       .select()

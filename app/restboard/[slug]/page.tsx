@@ -16,7 +16,6 @@ import { updateOrderStatus } from "@/queries/updateOrderStatus";
 import Swal from "sweetalert2";
 
 
-
 const Page = () => {
   const [activeView, setActiveView] = useState("orders");
   const [loading, setLoading] = useState(true);
@@ -124,6 +123,9 @@ const Page = () => {
 
       <div className="flex flex-1 overflow-hidden">
         <Sidebar
+        slug={slug}
+          tenatId={tenant.id}
+          userId={tenant.user_id}
           activeView={activeView}
           setActiveView={setActiveView}
           handleLogout={handleLogout}

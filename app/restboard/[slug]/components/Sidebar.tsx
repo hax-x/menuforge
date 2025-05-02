@@ -8,15 +8,22 @@ import {
   Store,
   Settings,
   LogOut,
+  ExternalLink,
 } from "lucide-react";
 
 interface SidebarProps {
+  tenatId: string,
+  slug: string,
+  userId: string,
   activeView: string;
   setActiveView: (view: string) => void;
   handleLogout: () => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
+  tenatId, 
+  slug,
+  userId,
   activeView,
   setActiveView,
   handleLogout,
@@ -72,16 +79,17 @@ const Sidebar: React.FC<SidebarProps> = ({
 
         <div className="mt-6 border-t border-zinc-700 pt-6">
           <Link
-            href={`/dashboard`}
+            href={`/dashboard/${userId}`}
             className="flex items-center gap-2 text-gray-300 hover:text-violet-300 transition-colors mb-4"
           >
             <Store size={18} />
             <span>Back to Restaurants</span>
           </Link>
           <Link
-            href="/dashboard"
+            href={`/${slug}`}
             className="flex items-center gap-2 text-gray-300 hover:text-violet-300 transition-colors mb-4"
           >
+            <ExternalLink size={18} />
             <span>Go to Consumer Site</span>
           </Link>
         </div>
