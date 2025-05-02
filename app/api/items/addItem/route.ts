@@ -13,6 +13,9 @@ export async function POST(request: NextRequest) {
     const image = formData.get("image") as Blob | null;
     const tenantId = formData.get("tenantId") as string | null;
     const categoryId = formData.get("categoryId") as string | null;
+    const availability = formData.get("availability") === "true";
+    const popular = formData.get("popular") === "true";
+
 
     if (!name || !price || !desc || !image || !tenantId || !categoryId) {
       return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
@@ -36,6 +39,8 @@ export async function POST(request: NextRequest) {
         tenant_id: tenantId,
         category_id: categoryId,
         image_url: url,
+        availability: availability,
+        popular: popular,
       },
     ]);
 

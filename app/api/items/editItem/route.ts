@@ -16,6 +16,8 @@ export async function PUT(request: NextRequest) {
     const description = formData.get("description") as string;
     const existingImageUrl = formData.get("existingImageUrl") as string;
     const file = formData.get("image") as Blob | null;
+    const availability = formData.get("availability") === "true";
+    const popular = formData.get("popular") === "true";
 
     if (!itemId || !name || !price || !description) {
       return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
@@ -55,6 +57,8 @@ export async function PUT(request: NextRequest) {
         desc: description,
         image_url: newImageUrl,
         updated_at: new Date(),
+        availability: availability,
+        popular: popular,
       })
       .eq("id", itemId);
 
