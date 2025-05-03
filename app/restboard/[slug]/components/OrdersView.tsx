@@ -1,18 +1,22 @@
 "use client";
-import React from 'react';
+import React from "react";
 import { Filter } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Swal from "sweetalert2";
 
 //Made changes to the grid and fixed the filters
 
 interface OrdersViewProps {
-  orders: [{
-    id: string;
-    customerName: string;
-    items: string;
-    totalAmount: string;
-    status: string;
-    created_at: Date;
-  }]
+  orders: [
+    {
+      id: string;
+      customerName: string;
+      orderDetails: { name: string; quantity: number; price: number; image_url: string }[];
+      totalAmount: string;
+      status: string;
+      created_at: Date;
+    }
+  ];
   statusFilter: string;
   setStatusFilter: (status: string) => void;
   updateOrderStatus: (orderId: string, newStatus: string) => void;
@@ -25,9 +29,12 @@ const OrdersView: React.FC<OrdersViewProps> = ({
   updateOrderStatus,
 }) => {
   // Exclude completed orders from active view
-  const activeOrders = orders.filter(order => order.status !== "Completed" && order.created_at.toString().slice(0, 10) === new Date().toISOString().slice(0, 10));
-    
-
+  const activeOrders = orders.filter(
+    (order) =>
+      order.status !== "Completed" &&
+      order.created_at.toString().slice(0, 10) ===
+        new Date().toISOString().slice(0, 10)
+  );
 
   const filteredOrders =
     statusFilter === "All"
@@ -46,7 +53,14 @@ const OrdersView: React.FC<OrdersViewProps> = ({
           <span className="text-gray-300 mr-2">Filter by status:</span>
         </div>
         <div className="flex gap-2 flex-wrap">
-          {["All", "Pending Confirmation", "Confirmed", "In Progress", "Dispatched", "Delivered"].map((status) => (
+          {[
+            "All",
+            "Pending Confirmation",
+            "Confirmed",
+            "In Progress",
+            "Dispatched",
+            "Delivered",
+          ].map((status) => (
             <button
               key={status}
               onClick={() => setStatusFilter(status)}
@@ -68,23 +82,74 @@ const OrdersView: React.FC<OrdersViewProps> = ({
         <table className="min-w-full bg-zinc-800 border border-zinc-700 rounded-lg table-fixed">
           <thead>
             <tr className="bg-zinc-700">
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-100 w-8">Order ID</th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-100 w-40">Customer</th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-100 w-60">Items</th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-100 w-24">Total</th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-100 w-36">Status</th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-100 w-36">Time</th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-100 w-40">Actions</th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-100 w-8">
+                Order ID
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-100 w-40">
+                Customer
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-100 w-60">
+                Items
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-100 w-24">
+                Total
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-100 w-36">
+                Status
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-100 w-36">
+                Time
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-100 w-40">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
             {filteredOrders.length > 0 ? (
               filteredOrders.map((order) => (
                 <tr key={order.id} className="border-t border-zinc-700">
-                  <td className="px-4 py-3 text-sm text-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">#{order.id}</td>
-                  <td className="px-4 py-3 text-sm text-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">{order.customerName}</td>
-                  <td className="px-4 py-3 text-sm text-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">{order.items}</td>
-                  <td className="px-4 py-3 text-sm text-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">{order.totalAmount}</td>
+                  <td className="px-4 py-3 text-sm text-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">
+                    #{order.id}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">
+                    {order.customerName}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">
+                    <Button variant={"outline"} className="bg-zinc-700 rounded-md"
+                      onClick={() => {
+                        const itemsHtml = order.orderDetails
+                          .map(
+                            (item: any) => `
+                              <div style="margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                                <strong>${item.name}</strong><br/>
+                                Quantity: ${item.quantity}<br/>
+                                Price: ${item.price}<br/>
+                                <img src="${item.image_url}" alt="${item.name}" width="100" height="100" style="margin-top: 5px; border-radius: 5px;" />
+                              </div>
+                            `
+                          )
+                          .join("")
+
+                        Swal.fire({
+                          title: "Order Details",
+                          html: `
+                            <div style="text-align: left; max-height: 400px; overflow-y: auto;">
+                              ${itemsHtml}
+                            </div>
+                          `,
+                          width: 600,
+                          showCloseButton: true,
+                          confirmButtonText: "Close",
+                        });
+                      }}
+                    >
+                      See Details
+                    </Button>
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">
+                    {order.totalAmount}
+                  </td>
                   <td className="px-4 py-3 text-sm">
                     <span
                       className={`px-2 py-1 rounded-full text-xs whitespace-nowrap ${
@@ -102,7 +167,9 @@ const OrdersView: React.FC<OrdersViewProps> = ({
                       {order.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">{order.created_at.toString().slice(11, 16)}</td>
+                  <td className="px-4 py-3 text-sm text-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">
+                    {order.created_at.toString().slice(11, 16)}
+                  </td>
                   <td className="px-4 py-3 text-sm">
                     <select
                       value={order.status}
@@ -111,12 +178,14 @@ const OrdersView: React.FC<OrdersViewProps> = ({
                       }
                       className="bg-zinc-700 border border-zinc-600 text-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-violet-400 w-full"
                     >
-                      <option value="Pending Confirmation">Pending Confirmation</option>
+                      <option value="Pending Confirmation">
+                        Pending Confirmation
+                      </option>
                       <option value="Confirmed">Confirmed</option>
                       <option value="In Progress">In Progress</option>
                       <option value="Dispatched">Dispatched</option>
                       <option value="Delivered">Delivered</option>
-                      <option value="Completed">Completed</option> 
+                      <option value="Completed">Completed</option>
                     </select>
                   </td>
                 </tr>

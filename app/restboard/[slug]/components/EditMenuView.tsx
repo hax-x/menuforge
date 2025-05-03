@@ -63,8 +63,7 @@ const EditMenuView = ({ tenantId }: { tenantId: string }) => {
         };
       })
     );
-    
-
+  
     setMenu(categoriesWithItems);
     setLoading(false);
   };
@@ -350,7 +349,7 @@ const EditMenuView = ({ tenantId }: { tenantId: string }) => {
                         <h4 className="text-lg font-medium text-white">{item.name}</h4>
                         <span className="font-bold text-violet-300">{item.price}</span>
                       </div>
-                      <p className="text-gray-300 text-sm mb-4">{item.desc}</p>
+                      <p className="text-gray-300 text-sm mb-4">{item.desc.slice(0, 20) + "..."}</p>
                       <div className="flex justify-end space-x-2">
                         <button onClick={() => handleEditItem(item)} className="text-blue-400 hover:text-blue-300">
                           <Edit size={16} />

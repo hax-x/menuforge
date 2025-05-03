@@ -5,7 +5,7 @@ const config = {
   domainName:
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://quillminds.com", // use the deployment URL in production
+      : "https://menuforge.vercel.app", // prod url
 };
 
 export default config;
