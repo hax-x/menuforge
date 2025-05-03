@@ -110,7 +110,7 @@ export default function ClientPage() {
       ) : (
         <TemplateThree tenant={tenant} menu={menu} />
       )} */}
-      <TemplateTwo tenant={tenant} menu={menu} />
+      <TemplateOne tenant={tenant} menu={menu} />
     </main>
   );
 }
