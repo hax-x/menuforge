@@ -21,6 +21,8 @@ type Item = {
   price: string;
   desc: string;
   image_url: string;
+  availability: boolean;
+  popular: boolean;
 };
 
 type Category = {
@@ -59,6 +61,8 @@ const EditMenuView = ({ tenantId }: { tenantId: string }) => {
             price: item.price,
             desc: item.desc,
             image_url: item.image_url,
+            availability: item.availability,
+            popular: item.popular,
           })),
         };
       })
@@ -104,21 +108,37 @@ const EditMenuView = ({ tenantId }: { tenantId: string }) => {
         <input id="price" class="swal2-input" placeholder="Price" />
         <textarea id="desc" class="swal2-textarea" placeholder="Description"></textarea>
         <input type="file" id="image" class="swal2-file" accept="image/*" />
+        <div style="margin-top: 10px;">
+          <label><input type="checkbox" id="availability" /> Available</label><br/>
+          <label><input type="checkbox" id="popular" /> Popular</label>
+        </div>
       `,
       focusConfirm: false,
       showCancelButton: true,
       preConfirm: () => {
-        const fileInput = document.getElementById("image") as HTMLInputElement;
-        const file = fileInput?.files?.[0];
-  
+        const popup = Swal.getPopup(); // Get the Swal popup element
+        
+        const name = (popup.querySelector("#name") as HTMLInputElement).value;
+        const price = (popup.querySelector("#price") as HTMLInputElement).value;
+        const description = (popup.querySelector("#desc") as HTMLTextAreaElement).value;
+        const file = (popup.querySelector("#image") as HTMLInputElement).files?.[0];
+        const availability = (popup.querySelector("#availability") as HTMLInputElement).checked;
+        const popular = (popup.querySelector("#popular") as HTMLInputElement).checked;
+        
+         // Log the values to ensure they're captured correctly
+        console.log("Form Values:", { name, price, description, availability, popular });
+        
         return {
-          name: (document.getElementById("name") as HTMLInputElement).value,
-          price: (document.getElementById("price") as HTMLInputElement).value,
-          description: (document.getElementById("desc") as HTMLTextAreaElement).value,
+          name,
+          price,
+          description,
           file,
+          availability,
+          popular,
         };
       },
     });
+    
   
     if (formValues) {
       const form = new FormData();
@@ -131,7 +151,12 @@ const EditMenuView = ({ tenantId }: { tenantId: string }) => {
       if (formValues.file) {
         form.append("image", formValues.file);
       }
-  
+      
+
+      // Ensure availability and popular are being sent correctly
+      form.append("availability", formValues.availability ? "true" : "false");
+      form.append("popular", formValues.popular ? "true" : "false");
+      
       const res = await fetch("/api/items/addItem", {
         method: "POST",
         body: form,
@@ -158,6 +183,10 @@ const EditMenuView = ({ tenantId }: { tenantId: string }) => {
         <input id="price" class="swal2-input" value="${item.price}" placeholder="Price" />
         <textarea id="desc" class="swal2-textarea" placeholder="Description">${item.desc}</textarea>
         <input type="file" id="image" class="swal2-file" accept="image/*" />
+        <div style="margin-top: 10px;">
+          <label><input type="checkbox" id="availability" ${item.availability ? "checked" : ""}/> Available</label><br/>
+          <label><input type="checkbox" id="popular" ${item.popular ? "checked" : ""}/> Popular</label>
+        </div>
       `,
       focusConfirm: false,
       showCancelButton: true,
@@ -170,6 +199,8 @@ const EditMenuView = ({ tenantId }: { tenantId: string }) => {
           price: (document.getElementById("price") as HTMLInputElement).value,
           description: (document.getElementById("desc") as HTMLTextAreaElement).value,
           file,
+          availability: (document.getElementById("availability") as HTMLInputElement).checked,
+          popular: (document.getElementById("popular") as HTMLInputElement).checked,
         };
       },
     });
@@ -181,6 +212,9 @@ const EditMenuView = ({ tenantId }: { tenantId: string }) => {
       form.append("price", formValues.price);
       form.append("description", formValues.description);
       form.append("existingImageUrl", item.image_url);
+      form.append("availability", formValues.availability ? "true" : "false");
+      form.append("popular", formValues.popular ? "true" : "false");
+
   
       if (formValues.file) {
         form.append("image", formValues.file);

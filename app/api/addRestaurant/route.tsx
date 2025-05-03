@@ -11,6 +11,14 @@ export async function POST(request: NextRequest) {
     const name = formData.get("name") as string | null;
     const slug = formData.get("slug") as string | null;
     const logo = formData.get("logo") as Blob | null;
+
+    //Adding new fields
+    const email = formData.get("email") as string;
+    const location = formData.get("location") as string;
+    const phone = formData.get("phone") as string;
+    const tagline = formData.get("tagline") as string;
+
+  
     const themeSettingsRaw = formData.get("themeSettings") as string | null;
     const userId = formData.get("userId") as string | null;
     const templateId = formData.get("templateId") as string | null;
@@ -44,6 +52,10 @@ export async function POST(request: NextRequest) {
           themeSettings: themeSettings,
           user_id: userId,
           templateId,
+          location,
+          phone,
+          email,
+          tagLine: tagline,
         },
       ])
       .select()
