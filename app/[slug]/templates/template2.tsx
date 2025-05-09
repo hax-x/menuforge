@@ -37,7 +37,7 @@ type Tenant = {
   slug: string;
   name: string;
   tagLine?: string;
-  address: string;
+  location: string;
   phone: string;
   email: string;
   hours?: string;
@@ -403,7 +403,7 @@ function AboutSection({ tenant, theme }: { tenant: Tenant; theme: any }) {
             <h3 className="font-medium mb-2" style={{ color: theme.colors.primary }}>
               Location & Hours
             </h3>
-            <p className="text-sm" style={{ color: theme.colors.accent }}>{tenant.address}</p>
+            <p className="text-sm" style={{ color: theme.colors.accent }}>{tenant.location}</p>
             {tenant.hours && (
               <p className="text-sm" style={{ color: theme.colors.accent }}>{tenant.hours}</p>
             )}

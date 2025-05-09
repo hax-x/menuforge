@@ -37,7 +37,7 @@ type Tenant = {
   slug: string;
   name: string;
   tagLine?: string;
-  address: string;
+  location: string;
   phone: string;
   email: string;
   hours?: string;
@@ -334,8 +334,8 @@ function SquareMenuItemCard({ item, theme, onAddToCart, formatPrice }: {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg">
       <div className="relative aspect-square">
-        <img 
-          src={item.iamage_url} 
+        <img
+          src={item.image_url} 
           alt={item.name} 
           className="w-full h-full object-cover"
           loading="lazy"
@@ -399,7 +399,7 @@ function AboutSection({ tenant, theme }: { tenant: Tenant; theme: any }) {
             <h3 className="text-xl font-semibold mb-2" style={{ color: theme.colors.primary }}>
               Location
             </h3>
-            <p className="text-gray-600">{tenant.address}</p>
+            <p className="text-gray-600">{tenant.location}</p>
           </div>
           
           <div className="bg-gray-50 p-6 rounded-lg shadow-sm text-center">

@@ -95,7 +95,6 @@ export default function ClientPage() {
     handleRestaboardData();
   }, [slug, router, supabase]);
   
-  // const templateId = 1; // Change this to 1, 2, or 3 to switch templates
 
   if (loading) {
     return <Loader />;
@@ -103,14 +102,14 @@ export default function ClientPage() {
 
   return (
     <main className="min-h-screen">
-      {/* {templateId === 1 ? (
+      {templateId === 1 ? (
         <TemplateOne tenant={tenant} menu={menu} />
       ) : templateId === 2 ? (
         <TemplateTwo tenant={tenant} menu={menu} />
       ) : (
         <TemplateThree tenant={tenant} menu={menu} />
-      )} */}
-      <TemplateOne tenant={tenant} menu={menu} />
+      )}
+      
     </main>
   );
 }
