@@ -5,6 +5,7 @@ import Sidebar from "./components/Sidebar";
 import OrdersView from "./components/OrdersView";
 import EditMenuView from "./components/EditMenuView";
 import StatisticsView from "./components/StatisticsView";
+import SettingsView from "./components/Settings";
 import Header from "@/components/header";
 import { createClient } from "@/supabase/client";
 import { useParams, useRouter } from "next/navigation";
@@ -14,7 +15,6 @@ import { getTenant } from "@/queries/tenantInfo";
 import { getAllOrders } from "@/queries/orders";
 import { updateOrderStatus } from "@/queries/updateOrderStatus";
 import Swal from "sweetalert2";
-
 
 const Page = () => {
   const [activeView, setActiveView] = useState("orders");
@@ -35,10 +35,9 @@ const Page = () => {
         router.push("/sign-in"); // Not logged in
         return;
       }
-      
+
       // if logged in, fetch this tenants data
       const tenant = await getTenant(slug);
-
       if (tenant.code === 0) {
         console.log("failed to fetch tenant: ", tenant.message);
         return;
@@ -58,14 +57,13 @@ const Page = () => {
         return;
       }
 
-      console.log("Orders: ", orders.data);     
+      console.log("Orders: ", orders.data);
       setOrders(orders.data);
       setLoading(false);
-    }
+    };
 
     handleRestaboardData();
-  }
-  , [slug, router, supabase]);
+  }, [slug, router, supabase]);
 
   const [statusFilter, setStatusFilter] = useState("All");
 
@@ -112,10 +110,8 @@ const Page = () => {
 
   // if loading is true, show loader
   if (loading) {
-      return (
-        <Loader />
-      );
-    }
+    return <Loader />;
+  }
 
   return (
     <div className="bg-zinc-900 h-screen flex flex-col text-gray-100">
@@ -123,7 +119,7 @@ const Page = () => {
 
       <div className="flex flex-1 overflow-hidden">
         <Sidebar
-        slug={slug}
+          slug={slug}
           tenatId={tenant.id}
           userId={tenant.user_id}
           activeView={activeView}
@@ -141,14 +137,14 @@ const Page = () => {
             />
           )}
 
-          {activeView === "editMenu" && (
-            <EditMenuView
-              tenantId={tenant.id}
-            />
-          )}
+          {activeView === "editMenu" && <EditMenuView tenantId={tenant.id} />}
 
           {activeView === "statistics" && (
             <StatisticsView statistics={statistics} />
+          )}
+
+          {activeView === "settings" && (
+            <SettingsView tenant={tenant} />
           )}
         </main>
       </div>
