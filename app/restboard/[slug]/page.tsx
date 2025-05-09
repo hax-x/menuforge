@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar";
 import OrdersView from "./components/OrdersView";
 import EditMenuView from "./components/EditMenuView";
@@ -11,19 +11,19 @@ import { useParams, useRouter } from "next/navigation";
 import Loader from "@/components/loader";
 import { getUser } from "@/queries/user";
 import { getTenant } from "@/queries/tenantInfo";
-import { getAllOrders } from "@/queries/orders";
 import { updateOrderStatus } from "@/queries/updateOrderStatus";
 import Swal from "sweetalert2";
-
+import { useRealtimeOrders } from "@/hooks/useOrders";
 
 const Page = () => {
   const [activeView, setActiveView] = useState("orders");
   const [loading, setLoading] = useState(true);
   const [tenant, setTenant] = useState<any>(null);
   const [orders, setOrders] = useState<any>([]);
+  const [statusFilter, setStatusFilter] = useState("All");
+
   const params = useParams();
   const slug = params?.slug as string;
-
   const supabase = createClient();
   const router = useRouter();
 
@@ -32,11 +32,10 @@ const Page = () => {
       const user = await getUser();
 
       if (user === null) {
-        router.push("/sign-in"); // Not logged in
+        router.push("/sign-in");
         return;
       }
-      
-      // if logged in, fetch this tenants data
+
       const tenant = await getTenant(slug);
 
       if (tenant.code === 0) {
@@ -47,27 +46,24 @@ const Page = () => {
       }
 
       if (user.id != tenant.data.user_id) {
-        router.push("/unauthorized"); // Logged in but wrong user
+        router.push("/unauthorized");
         return;
       }
 
-      // User is authorized, fetch orders for this user
-      const orders = await getAllOrders(tenant.data.id);
-      if (orders.code === 0) {
-        console.log("failed to fetch orders: ", orders.message);
-        return;
-      }
-
-      console.log("Orders: ", orders.data);     
-      setOrders(orders.data);
       setLoading(false);
-    }
+    };
 
     handleRestaboardData();
-  }
-  , [slug, router, supabase]);
+  }, [slug, router, supabase]);
 
-  const [statusFilter, setStatusFilter] = useState("All");
+  // Use realtime orders only after tenant is loaded
+  const realtimeOrders = useRealtimeOrders(tenant?.id);
+
+  useEffect(() => {
+    if (realtimeOrders && Array.isArray(realtimeOrders)) {
+      setOrders(realtimeOrders);
+    }
+  }, [realtimeOrders]);
 
   const handleLogout = () => {
     Swal.fire({
@@ -83,15 +79,6 @@ const Page = () => {
         router.push("/sign-in");
       }
     });
-  };
-
-  const statistics = {
-    totalRevenue: "$1,000",
-    totalOrders: orders.length,
-    averageOrderValue: "$20.00",
-    popularItems: ["Burger", "Pizza"],
-    peakHours: "12:00 PM - 2:00 PM",
-    customerRetention: "85%",
   };
 
   const handleUpdateStatus = async (orderId: string, status: string) => {
@@ -110,12 +97,9 @@ const Page = () => {
     console.log("Order status updated successfully:", result.data);
   };
 
-  // if loading is true, show loader
-  if (loading) {
-      return (
-        <Loader />
-      );
-    }
+  if (loading || !tenant) {
+    return <Loader />;
+  }
 
   return (
     <div className="bg-zinc-900 h-screen flex flex-col text-gray-100">
@@ -123,7 +107,7 @@ const Page = () => {
 
       <div className="flex flex-1 overflow-hidden">
         <Sidebar
-        slug={slug}
+          slug={slug}
           tenatId={tenant.id}
           userId={tenant.user_id}
           activeView={activeView}
@@ -142,13 +126,11 @@ const Page = () => {
           )}
 
           {activeView === "editMenu" && (
-            <EditMenuView
-              tenantId={tenant.id}
-            />
+            <EditMenuView tenantId={tenant.id} />
           )}
 
           {activeView === "statistics" && (
-            <StatisticsView statistics={statistics} />
+            <StatisticsView orders={orders} />
           )}
         </main>
       </div>

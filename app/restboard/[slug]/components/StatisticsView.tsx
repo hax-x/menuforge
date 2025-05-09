@@ -1,73 +1,145 @@
 "use client";
-import React from 'react';
+import React from "react";
+import { computeStatistics } from "../utility";
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Bar, CartesianGrid, Line, Pie, Tooltip, XAxis, YAxis } from "recharts";
 
-interface StatisticsData {
-  totalRevenue: string;
-  totalOrders: number;
-  averageOrderValue: string;
-  popularItems: string[];
-  peakHours: string;
-  customerRetention: string;
-}
+const StatisticsView = ({
+  orders,
+}: {
+  orders: [
+    {
+      id: string;
+      customerName: string;
+      orderDetails: {
+        name: string;
+        quantity: number;
+        price: number;
+        image_url: string;
+      }[];
+      totalAmount: string;
+      status: string;
+      created_at: Date;
+      location: string;
+    }
+  ];
+}) => {
+  const [stats, setStats] = useState<any>(null);
 
-interface StatisticsViewProps {
-  statistics: StatisticsData;
-}
+  useEffect(() => {
+    if (orders?.length) {
+      const computed = computeStatistics(orders);
+      setStats(computed);
+    }
+  }, [orders]);
 
-const StatisticsView: React.FC<StatisticsViewProps> = ({ statistics }) => {
+  if (!stats) return <div className="p-4">Loading statistics...</div>;
+
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6 text-gray-100">Statistics</h2>
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 p-6">
+      {/* Revenue Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Total Revenue</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-3xl font-bold text-green-600">
+            PKR {stats.totalRevenue.toFixed(2)}
+          </p>
+        </CardContent>
+      </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {/* Revenue Card */}
-        <div className="bg-zinc-800 p-6 rounded-lg shadow border border-zinc-700">
-          <h3 className="text-gray-400 text-sm mb-1">Total Revenue</h3>
-          <p className="text-3xl font-bold text-gray-100">{statistics.totalRevenue}</p>
-          <p className="text-green-400 mt-2">↑ 12% from last month</p>
-        </div>
+      {/* Orders Summary */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Order Summary</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <p>Total Orders: {stats.totalOrders}</p>
+          <p>Completed: {stats.completedOrders}</p>
+          <p>Cancelled: {stats.cancelledOrders}</p>
+          <p>Pending: {stats.pendingOrders}</p>
+        </CardContent>
+      </Card>
 
-        {/* Orders Card */}
-        <div className="bg-zinc-800 p-6 rounded-lg shadow border border-zinc-700">
-          <h3 className="text-gray-400 text-sm mb-1">Total Orders</h3>
-          <p className="text-3xl font-bold text-gray-100">{statistics.totalOrders}</p>
-          <p className="text-green-400 mt-2">↑ 8% from last month</p>
-        </div>
+      {/* Average, Max, Min */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Order Value Stats</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <p>Average: PKR {stats.averageOrderValue.toFixed(2)}</p>
+          <p>Max: PKR {stats.maxOrderValue.toFixed(2)}</p>
+          <p>Min: PKR {stats.minOrderValue.toFixed(2)}</p>
+        </CardContent>
+      </Card>
 
-        {/* Average Order Value Card */}
-        <div className="bg-zinc-800 p-6 rounded-lg shadow border border-zinc-700">
-          <h3 className="text-gray-400 text-sm mb-1">Average Order Value</h3>
-          <p className="text-3xl font-bold text-gray-100">{statistics.averageOrderValue}</p>
-          <p className="text-green-400 mt-2">↑ 4% from last month</p>
-        </div>
-      </div>
+      {/* Time-based Orders */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Orders by Time</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <p>Today: {stats.ordersToday}</p>
+          <p>This Week: {stats.ordersThisWeek}</p>
+          <p>This Month: {stats.ordersThisMonth}</p>
+          <p>Peak Hour: {stats.peakHour}</p>
+        </CardContent>
+      </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Popular Items */}
-        <div className="bg-zinc-800 p-6 rounded-lg shadow border border-zinc-700">
-          <h3 className="text-lg font-semibold mb-4 text-gray-200">Most Popular Items</h3>
-          <ol className="list-decimal pl-5 text-gray-300">
-            {statistics.popularItems.map((item, index) => (
-              <li key={index} className="mb-2">{item}</li>
-            ))}
-          </ol>
-        </div>
+      {/* Popular Items Pie Chart */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Top 5 Items</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Pie
+            width={300}
+            height={300}
+            data={stats.popularItems}
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
+            outerRadius={100}
+            fill="#82ca9d"
+            label
+          />
+        </CardContent>
+      </Card>
 
-        {/* Additional Stats */}
-        <div className="bg-zinc-800 p-6 rounded-lg shadow border border-zinc-700">
-          <h3 className="text-lg font-semibold mb-4 text-gray-200">Additional Insights</h3>
-          <div className="space-y-4">
-            <div>
-              <p className="text-gray-400">Peak Hours</p>
-              <p className="font-semibold text-gray-200">{statistics.peakHours}</p>
-            </div>
-            <div>
-              <p className="text-gray-400">Customer Retention</p>
-              <p className="font-semibold text-gray-200">{statistics.customerRetention}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Sales Over Last 7 Days Line Chart */}
+      <Card className="col-span-1 md:col-span-2 xl:col-span-3">
+        <CardHeader>
+          <CardTitle>Sales in Last 7 Days</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Line
+            width={800}
+            height={300}
+            data={stats.salesLast7Days}
+            margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+          >
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip />
+            <CartesianGrid strokeDasharray="3 3" />
+            <Line
+              type="monotone"
+              dataKey="totalSales"
+              stroke="#8884d8"
+              strokeWidth={2}
+            />
+            <Line
+              type="monotone"
+              dataKey="orderCount"
+              stroke="#82ca9d"
+              strokeWidth={2}
+            />
+          </Line>
+        </CardContent>
+      </Card>
     </div>
   );
 };

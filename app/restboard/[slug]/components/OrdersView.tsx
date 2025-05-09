@@ -15,6 +15,7 @@ interface OrdersViewProps {
       totalAmount: string;
       status: string;
       created_at: Date;
+      location: string;
     }
   ];
   statusFilter: string;
@@ -40,6 +41,8 @@ const OrdersView: React.FC<OrdersViewProps> = ({
     statusFilter === "All"
       ? activeOrders
       : activeOrders.filter((order) => order.status === statusFilter);
+
+  console.log(orders)
 
   return (
     <div className="p-6">
@@ -129,7 +132,7 @@ const OrdersView: React.FC<OrdersViewProps> = ({
                               </div>
                             `
                           )
-                          .join("")
+                          .join("") + `<div><p><strong>Location: </strong>${order.location}</p></div>`;
 
                         Swal.fire({
                           title: "Order Details",
