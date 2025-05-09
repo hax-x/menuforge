@@ -55,7 +55,7 @@ export function Login({ mode = "signin" }: { mode?: "signin" | "signup" }) {
             </p>
           </div>
 
-          {mode === "signup" && (
+          {/* {mode === "signup" && (
             <div className="grid grid-cols-2 gap-4">
               <Input
                 name="firstName"
@@ -72,7 +72,7 @@ export function Login({ mode = "signin" }: { mode?: "signin" | "signup" }) {
                 className="rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-gray-100 focus:border-violet-400 focus:ring-violet-400"
               />
             </div>
-          )}
+          )} */}
 
           <Input
             name="email"
@@ -99,12 +99,12 @@ export function Login({ mode = "signin" }: { mode?: "signin" | "signup" }) {
                 required
                 className="rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-gray-100 focus:border-violet-400 focus:ring-violet-400"
               />
-              <Input
+              {/* <Input
                 name="phoneNumber"
                 type="tel"
                 placeholder="Phone Number"
                 className="rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-gray-100 focus:border-violet-400 focus:ring-violet-400"
-              />
+              /> */}
             </>
           )}
 

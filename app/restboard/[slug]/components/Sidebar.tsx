@@ -95,12 +95,12 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         <div className="mt-auto space-y-3">
-          <Link href="/settings" className="block">
-            <div className="px-4 py-2.5 rounded-lg bg-zinc-700 text-gray-100 text-center hover:bg-zinc-600 transition-colors flex items-center justify-center gap-2">
+            <div onClick={() => {
+              setActiveView("settings");
+            }} className="px-4 py-2.5 rounded-lg bg-zinc-700 text-gray-100 text-center hover:bg-zinc-600 transition-colors flex items-center justify-center gap-2">
               <Settings size={18} />
               <span>Settings</span>
             </div>
-          </Link>
           <button
             onClick={handleLogout}
             className="px-4 py-2.5 rounded-lg bg-zinc-700 text-gray-100 hover:bg-zinc-600 transition-colors w-full flex items-center justify-center gap-2"

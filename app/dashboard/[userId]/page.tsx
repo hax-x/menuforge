@@ -26,6 +26,7 @@ export default function UserDashboard() {
 
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showReminder, setShowReminder] = useState(false);
 
   useEffect(() => {
     const protectRoute = async () => {
@@ -41,9 +42,16 @@ export default function UserDashboard() {
         return;
       }
 
-      // User is authorized, fetch restaurants for this user
-      const tenants = await getTenants(userId);
+      // Check if account was created within last 24 hours
+      const createdAt = new Date(user.created_at);
+      const now = new Date();
+      const diffInHours = (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60);
+      if (diffInHours < 24) {
+        setShowReminder(true);
+      }
 
+      // Fetch restaurants
+      const tenants = await getTenants(userId);
       if (tenants.code === 0) {
         console.error("Error fetching restaurants:", tenants.message);
       } else {
@@ -57,14 +65,28 @@ export default function UserDashboard() {
   }, [userId, supabase, router]);
 
   if (loading) {
-    return (
-      <Loader />
-    );
+    return <Loader />;
   }
 
   return (
-    <div className="bg-zinc-900 min-h-screen flex flex-col text-gray-100">
+    <div className="bg-zinc-900 min-h-screen flex flex-col text-gray-100 relative">
       <Header userId={userId} />
+
+      {/* 24-Hour Profile Reminder Popup */}
+      {showReminder && (
+        <div className="absolute top-4 right-4 z-50">
+          <div className="relative bg-violet-600 text-white text-sm rounded-lg shadow-xl px-4 py-2 animate-bounce max-w-xs">
+            👋 Welcome! Don’t forget to complete your profile and add your restaurant!
+            <button
+              onClick={() => setShowReminder(false)}
+              className="absolute top-1 right-2 text-white hover:text-zinc-300"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
       <main className="flex-1 w-full px-4 sm:px-6 md:px-8 py-8">
         <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">
           Your Restaurants

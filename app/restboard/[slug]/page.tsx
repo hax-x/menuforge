@@ -5,6 +5,7 @@ import Sidebar from "./components/Sidebar";
 import OrdersView from "./components/OrdersView";
 import EditMenuView from "./components/EditMenuView";
 import StatisticsView from "./components/StatisticsView";
+import SettingsView from "./components/Settings";
 import Header from "@/components/header";
 import { createClient } from "@/supabase/client";
 import { useParams, useRouter } from "next/navigation";
@@ -36,8 +37,8 @@ const Page = () => {
         return;
       }
 
+      // if logged in, fetch this tenants data
       const tenant = await getTenant(slug);
-
       if (tenant.code === 0) {
         console.log("failed to fetch tenant: ", tenant.message);
         return;
@@ -131,6 +132,10 @@ const Page = () => {
 
           {activeView === "statistics" && (
             <StatisticsView orders={orders} />
+          )}
+
+          {activeView === "settings" && (
+            <SettingsView tenant={tenant} />
           )}
         </main>
       </div>
