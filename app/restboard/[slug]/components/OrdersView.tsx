@@ -63,6 +63,7 @@ const OrdersView: React.FC<OrdersViewProps> = ({
             "In Progress",
             "Dispatched",
             "Delivered",
+            "Cancelled",
           ].map((status) => (
             <button
               key={status}
@@ -189,6 +190,7 @@ const OrdersView: React.FC<OrdersViewProps> = ({
                       <option value="Dispatched">Dispatched</option>
                       <option value="Delivered">Delivered</option>
                       <option value="Completed">Completed</option>
+                      <option value="Cancelled">Cancelled</option>
                     </select>
                   </td>
                 </tr>
