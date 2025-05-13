@@ -42,7 +42,20 @@ const StatisticsView = ({
 }) => {
   const [stats, setStats] = useState<any>(null);
   const [timeFilter, setTimeFilter] = useState("All time");
-  const [filteredOrders, setFilteredOrders] = useState(orders);
+  const [filteredOrders, setFilteredOrders] = useState<Array<{
+    id: string;
+    customerName: string;
+    orderDetails: {
+      name: string;
+      quantity: number;
+      price: number;
+      image_url: string;
+    }[];
+    totalAmount: string;
+    status: string;
+    created_at: Date;
+    location: string;
+  }>>(orders);
 
   // Apply time filter
   useEffect(() => {
@@ -306,7 +319,7 @@ const StatisticsView = ({
                   fill="#8884d8"
                   label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                 >
-                  {stats.popularItems.map((entry, index) => (
+                  {stats.popularItems.map((_entry: { name: string; value: number }, index: number) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
