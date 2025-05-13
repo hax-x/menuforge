@@ -139,7 +139,7 @@ export function Login({ mode = "signin" }: { mode?: "signin" | "signup" }) {
             </div>
           )}
 
-{/* Google Authentication Button */}
+{/* Google Authentication Button
           {mode === "signin" && (
             <>
               <div className="relative flex items-center justify-center my-6">
@@ -181,7 +181,7 @@ export function Login({ mode = "signin" }: { mode?: "signin" | "signup" }) {
                 )}
               </Button>
             </>
-          )}
+          )} */}
           
           {mode === "signup" ? 
             <Link

@@ -118,6 +118,9 @@ const EditMenuView = ({ tenantId }: { tenantId: string }) => {
       preConfirm: () => {
         const popup = Swal.getPopup(); // Get the Swal popup element
         
+        if (!popup) {
+          throw new Error("Popup element not found");
+        }
         const name = (popup.querySelector("#name") as HTMLInputElement).value;
         const price = (popup.querySelector("#price") as HTMLInputElement).value;
         const description = (popup.querySelector("#desc") as HTMLTextAreaElement).value;
