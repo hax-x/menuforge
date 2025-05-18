@@ -5,11 +5,15 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import temp1 from '@/public/temp1.jpg'
+import temp2 from '@/public/temp2.jpg'
+import temp3 from '@/public/temp3.jpg'
+import Image from "next/image";
 
 const templates = [
-  { id: 1, name: "Template 1", image: "/template1.png" },
-  { id: 2, name: "Template 2", image: "/template2.png" },
-  { id: 3, name: "Template 3", image: "/template3.png" },
+  { id: 1, name: "Template 1", image: temp1 },
+  { id: 2, name: "Template 2", image: temp2 },
+  { id: 3, name: "Template 3", image: temp3 },
 ];
 
 function AddRestaurant() {
@@ -175,7 +179,7 @@ function AddRestaurant() {
                   </svg>
                 </button>
 
-                <div className="relative w-56 h-64 flex items-center justify-center">
+                <div className="relative w-96 h-64 flex items-center justify-center">
                   <AnimatePresence initial={false} custom={direction}>
                     <motion.div
                       key={templates[currentIndex].id}
@@ -189,14 +193,16 @@ function AddRestaurant() {
                         stiffness: 300,
                         damping: 30,
                       }}
-                      className="w-full h-full rounded-lg overflow-hidden border border-zinc-700 shadow-lg bg-zinc-700 flex flex-col items-center"
-                      style={{ userSelect: "none" }}
-                    >
-                      <img
+                      className="relative w-full h-full rounded-lg overflow-hidden border border-zinc-700 shadow-lg bg-zinc-700 flex flex-col items-center"
+                      style={{ userSelect: "none" }}>
+                      <Image
                         src={templates[currentIndex].image}
                         alt={templates[currentIndex].name}
                         className="w-full h-48 object-cover"
                         draggable={false}
+                        fill
+                        objectFit="cover"
+                        // style={{ width: "100%", height: "12rem", objectFit: "cover" }}
                       />
                       <div className="p-4 text-center text-gray-200 font-semibold">
                         {templates[currentIndex].name}

@@ -4,11 +4,14 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import temp1 from '@/public/temp1.jpg'
+import temp2 from '@/public/temp2.jpg'
+import temp3 from '@/public/temp3.jpg'
 
 const templates = [
-  { id: 1, name: "Template 1", image: "/template1.png" },
-  { id: 2, name: "Template 2", image: "/template2.png" },
-  { id: 3, name: "Template 3", image: "/template3.png" },
+  { id: 1, name: "Template 1", image: temp1 },
+  { id: 2, name: "Template 2", image: temp2 },
+  { id: 3, name: "Template 3", image: temp3 },
 ];
 
 export default function RestaurantSettings({ tenant }: { tenant: any }) {
@@ -306,7 +309,7 @@ export default function RestaurantSettings({ tenant }: { tenant: any }) {
               >
                 Template
               </label>
-              <div className="flex items-center gap-4">
+              <div className="flex flex-col items-center gap-4">
                 <select
                   id="templateId"
                   value={formData.templateId}
@@ -320,11 +323,11 @@ export default function RestaurantSettings({ tenant }: { tenant: any }) {
                   ))}
                 </select>
 
-                <div className="h-12 w-12 bg-zinc-600 rounded overflow-hidden">
+                <div className="h-64 w-80 bg-zinc-600 rounded overflow-hidden">
                   <img
                     src={
-                      templates.find((t) => t.id === formData.templateId)
-                        ?.image || templates[0].image
+                      (templates.find((t) => t.id === formData.templateId)
+                        ?.image?.src || templates[0].image.src)
                     }
                     alt="Selected Template"
                     className="h-full w-full object-cover"
