@@ -1,31 +1,26 @@
-# Menu Forge Documentaion
+# MenuForge 
 
-## Authentication Logic
-I am using supabase for authentication (email-password signup/signin and google signin)
+**MenuForge** is a SaaS website builder designed specifically to help new restaurants create and launch their own professional websites—quickly, easily, and for free.
 
-## Routing Logic in the App
-I am using Next.js for routing. 
+## Features
 
-**1. Public Routes**
-- These routes are accessible to all users.
-- Landing Page, Sign-in, Sign-up, and restaurant pages will be public.
+- **Customizable Websites**  
+  Choose from ready-to-use templates and customize layouts, colors, and content to match your restaurant's identity.
 
+- **Free of Cost**  
+  No subscriptions, no hidden fees. MenuForge is 100% free to use, making it perfect for new ventures on a budget.
 
-**2. Protected Routes**
-- Protected routes require the user to be authenticated.
-- The getUser function is used to check if a user is logged in. If not, the user is redirected to /sign-in.
-- user and restaurant dashboards will be protected.
+- **Menu Management Made Simple**  
+  Easily add, update, and organize your food menu with our intuitive interface.
 
-**3. Redirection Logic**
-- Handles redirection after successful authentication.
-- Either use the getUser function in each page (redirect if null), or use middleware to set global protected routes (for example, protect everything starting with /dashboard which will include /dashboard/userId and /dashboard/slug). 
+- **No Technical Skills Needed**  
+  Just plug in your information and publish. No coding or design experience required.
 
+## Tech Stack
 
-## done
+- **Frontend:** NextJS, TailwindCSS, ShadCN
+- **Backend:** NextJS
+- **Database:** PostgresSql (Supabase)
+- **Hosting:** Vercel (check it out: menuforge.vercel.app)
+   
 
-- routing for dashboard, restboard and consumer sites done
-
-## next to be done
-
-- fix the signup signin pages.
-- design dashboard, restboard, consumer site templates
