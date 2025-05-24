@@ -1,26 +1,54 @@
-# MenuForge 
+# MenuForge
 
-**MenuForge** is a SaaS website builder designed specifically to help new restaurants create and launch their own professional websites—quickly, easily, and for free.
+**MenuForge** is a full-stack SaaS platform that enables restaurants and businesses to create, customize, and launch their own fully functional online storefronts—without writing a single line of code.
+
+---
 
 ## Features
 
-- **Customizable Websites**  
-  Choose from ready-to-use templates and customize layouts, colors, and content to match your restaurant's identity.
+### Admin Dashboard (For Business Owners)
+- Easy onboarding
+- Create, remove, and edit Restauransts
+- Change Admin settings
 
-- **Free of Cost**  
-  No subscriptions, no hidden fees. MenuForge is 100% free to use, making it perfect for new ventures on a budget.
+### Restaurant Dashboard
+- MENU - Categories and Items management with images and categories
+- Real-Time Order tracking and management
+- Real-time customization for Consumer Site
+- Statistics dashboard and sales insights for BUSINESS INTELLIGENCE
 
-- **Menu Management Made Simple**  
-  Easily add, update, and organize your food menu with our intuitive interface.
+### Client Site (For End Customers)
+- Fully responsive and mobile-friendly storefront
+- Customizable UI
+- Category-based menu browsing and shopping cart
+- Secure checkout
+- Live order updates via WebSocket
 
-- **No Technical Skills Needed**  
-  Just plug in your information and publish. No coding or design experience required.
+---
 
 ## Tech Stack
 
-- **Frontend:** NextJS, TailwindCSS, ShadCN
-- **Backend:** NextJS
-- **Database:** PostgresSql (Supabase)
-- **Hosting:** Vercel (check it out: menuforge.vercel.app)
-   
+### Frontend
+- **Next.js**, **Tailwind CSS**, **ShadCN UI**
+- Data fetching: **Supabase Client**
+- Animations: **Framer Motion**
 
+### Backend
+- **NestJS**
+- Authentication: **Supabase Auth and OAuth
+- Real-time updates: **Supabase**
+
+### Database
+- **PostgreSQL** (via Supabase) 
+
+### DevOps
+- **Deployment**: Vercel (frontend), Railway/AWS (backend)
+- **Storage**: Amazon S3
+
+
+##  Getting Started
+- Go to https://menuforge.vercel.app/
+- Login or Signup
+- Crate your restaurant
+- Add your Menu
+- And that's it. Now you have flly functional admin and consumer sites for your restaurant.
