@@ -51,4 +51,4 @@
 - Login or Signup
 - Crate your restaurant
 - Add your Menu
-- And that's it. Now you have flly functional admin and consumer sites for your restaurant.
+- And that's it. Now you have a fully functional admin dashboard and consumer site for your restaurant.
